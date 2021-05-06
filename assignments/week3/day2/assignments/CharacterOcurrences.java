@@ -16,21 +16,21 @@ public class CharacterOcurrences {
 
 //	3. Create an empty Map<Character,Integer>
 		Map<Character, Integer> map = new LinkedHashMap<Character, Integer>();
-// 4. Iterate over the array
+//      4. Iterate over the array
 
 		for (int i = 0; i < charArray.length; i++) {
-// 5. Check whether the Map contains the Character
+//      5. Check whether the Map contains the Character
 			if (map.containsKey(charArray[i])) {
-// 6. If it contains then increment the key (+1)
+//      6. If it contains then increment the key (+1)
 				Integer value = map.get(charArray[i]);
-// 7. Add the character in the map & set the value as 1
+//      7. Add the character in the map & set the value as 1
 				int newValue = value + 1;
 				map.put(charArray[i], newValue);
 			} else {
 				map.put(charArray[i], 1);
 			}
-		}
-// 8. Print the Map
+ 		}
+//      8. Print the Map
 		System.out.println(map);
 	}
 }
