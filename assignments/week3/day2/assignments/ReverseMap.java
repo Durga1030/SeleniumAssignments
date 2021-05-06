@@ -15,20 +15,14 @@ public class ReverseMap {
 		 * Balaji
 		 */
 
+		
 		TreeMap<Integer, String> map = new TreeMap<>(Collections.reverseOrder());
 		map.put(100, "Hari");
 		map.put(101, "Naveen");
 		map.put(102, "Sam");
 		map.put(104, "Balaji");
 
-		Set set = map.entrySet();
-		Iterator i = set.iterator();
-
-		while (i.hasNext()) {
-
-			Map.Entry mapEntry = (Map.Entry) i.next();
-			System.out.print(mapEntry.getKey() + ": ");
-			System.out.println(mapEntry.getValue());
+		System.out.println(map);
 
 		}
 
