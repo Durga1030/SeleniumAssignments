@@ -33,13 +33,11 @@ public class RemoveDuplicates {
 // Check the dupCharSet elements and remove those in the charSet
 		if (dupCharSet.equals(charSet)) {
 			charSet.remove(dupCharSet);
+						// System.out.println(dupCharSet);
 		}
 
 // Print each character for CharSet
-		Iterator result = charSet.iterator();
-		System.out.println("The values in charset are :");
-		while (result.hasNext()) {
-			System.out.print(result.next() + " ");
-		}
+				System.out.println(charSet);
+
 	}
 }
