@@ -1,0 +1,96 @@
+package week4.day2.assignments.incmanagement;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class ResolveIncident {
+
+	public static void main(String[] args) throws InterruptedException {
+
+		WebDriverManager.chromedriver().setup();
+
+		ChromeDriver driver = new ChromeDriver();
+// 1. Launch ServiceNow application - https://dev103117.service-now.com
+		driver.get("https://dev103117.service-now.com");
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+// 2. Login with valid credentials username as admin and password as India@123
+
+		// Switch to frame
+		driver.switchTo().frame(0);
+
+		driver.findElement(By.id("user_name")).sendKeys("admin");
+		driver.findElement(By.id("user_password")).sendKeys("India@123");
+		driver.findElement(By.xpath("//button[text()='Log in']")).click();
+
+// 3. Enter Incident in filter navigator and press enter"
+		WebElement incident = driver.findElement(By.id("filter"));
+		incident.sendKeys("Incident");
+		incident.sendKeys(Keys.ENTER);
+
+// 4. Search for the existing incident and click on the incident
+
+		driver.findElement(By.xpath("//div[text()='Open']")).click();
+		driver.switchTo().frame(0);
+
+		Thread.sleep(2000);
+		WebElement searchIncident = driver.findElement(By.xpath("//input[@placeholder='Search']"));
+		searchIncident.click();
+		searchIncident.sendKeys("INC0010241");
+		searchIncident.sendKeys(Keys.ENTER);
+
+		Thread.sleep(2000);
+
+		WebElement resultantNumber = driver.findElement(By.xpath("//a[@class='linked formlink']"));
+		System.out.println("Incident Number to be update: " + resultantNumber.getText());
+		System.out.println(" ");
+		resultantNumber.click();
+
+// 5. Update the state as Resolved and update the Resolution informations
+
+		Select incidentState = new Select(driver.findElement(By.id("incident.state")));
+		incidentState.selectByIndex(3);
+		System.out.println("Updated incident state value as Resolved");
+		System.out.println(" ");
+
+		Actions actions = new Actions(driver);
+		WebElement navRelatedSearchResults = driver.findElement(By.id("cxs_maximize_results"));
+		WebElement navResolutionInfo = driver.findElement(By.xpath("//span[text()='Resolution Information']"));
+		WebElement resolutionNotes = driver.findElement(By.id("incident.close_notes"));
+		actions.moveToElement(navRelatedSearchResults).moveToElement(navResolutionInfo).click()
+				.moveToElement(resolutionNotes).click().perform();
+		resolutionNotes.sendKeys("Test - Updating the resolution state and it's information");
+
+		Select incidentCloseCode = new Select(driver.findElement(By.id("incident.close_code")));
+		incidentCloseCode.selectByIndex(7);
+
+// 6. Resolve the incident and verify the State
+
+		// Click on Resolve button
+		driver.findElement(By.id("resolve_incident_bottom")).click();
+
+		String verifyState = driver.findElement(By.cssSelector("table#incident_table>tbody>tr>td:nth-of-type(8)"))
+				.getText();
+
+		if (verifyState.equalsIgnoreCase("Resolved")) {
+			System.out.println(" ");
+			System.out.println(
+					resultantNumber.getText() + " has been " + verifyState + " Test Case passed: - closing window");
+
+			driver.close();
+
+		} else {
+			System.err.println("Resolve Incident - TestCase failed");
+		}
+
+	}
+}
